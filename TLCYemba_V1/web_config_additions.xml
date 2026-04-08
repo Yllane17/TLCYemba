@@ -1,0 +1,62 @@
+<!-- ================================================================
+     TLC YEMBA — Additions a Web.config pour OAuth + SMTP + Reset
+     Coller dans la section <configuration><appSettings> de Web.config
+     ================================================================ -->
+
+<appSettings>
+  <!-- URL de base de l'application (adapter au port Visual Studio) -->
+  <add key="AppBaseUrl" value="http://localhost:60000"/>
+
+  <!-- ── Google OAuth 2.0 ──
+       1. Aller sur console.cloud.google.com
+       2. Creer un projet -> APIs & Services -> Credentials
+       3. Creer un "OAuth 2.0 Client ID" (type: Web Application)
+       4. Ajouter URI de redirection : http://localhost:60000/OAuthCallback.aspx?provider=google
+  -->
+  <add key="Google_ClientId"     value="VOTRE_GOOGLE_CLIENT_ID"/>
+  <add key="Google_ClientSecret" value="VOTRE_GOOGLE_CLIENT_SECRET"/>
+
+  <!-- ── GitHub OAuth ──
+       1. Aller sur github.com -> Settings -> Developer settings -> OAuth Apps
+       2. New OAuth App
+       3. Authorization callback URL : http://localhost:60000/OAuthCallback.aspx?provider=github
+  -->
+  <add key="GitHub_ClientId"     value="VOTRE_GITHUB_CLIENT_ID"/>
+  <add key="GitHub_ClientSecret" value="VOTRE_GITHUB_CLIENT_SECRET"/>
+
+  <!-- ── Apple Sign In ──
+       1. Necessite un compte Apple Developer (payant)
+       2. Certificates, IDs & Profiles -> Identifiers -> Services IDs
+       3. Ajouter domain et redirect URL
+       Note : Apple envoie le token en POST (form_post) vers OAuthCallback.aspx?provider=apple
+  -->
+  <add key="Apple_ClientId"  value="VOTRE_APPLE_SERVICE_ID"/>
+
+  <!-- ── SMTP — Envoi du code de reset ──
+       Option A : Gmail (activer "Mots de passe d'application" dans votre compte Google)
+       Option B : Mailtrap.io (gratuit pour dev) -> smtp.mailtrap.io port 587
+       Option C : Serveur SMTP universitaire
+  -->
+  <add key="Smtp_Host"     value="smtp.gmail.com"/>
+  <add key="Smtp_Port"     value="587"/>
+  <add key="Smtp_User"     value="votre.email@gmail.com"/>
+  <add key="Smtp_Password" value="VOTRE_MOT_DE_PASSE_APPLICATION_GMAIL"/>
+  <add key="Smtp_Sender"   value="noreply@tlcyemba.cm"/>
+</appSettings>
+
+<!-- ================================================================
+     Pour TESTER le SMTP en developpement sans vrai serveur :
+     Remplacer SmtpClient dans EmailService.cs par cette config :
+     ================================================================
+
+<system.net>
+  <mailSettings>
+    <smtp deliveryMethod="SpecifiedPickupDirectory">
+      <specifiedPickupDirectory pickupDirectoryLocation="C:\EmailTest\"/>
+    </smtp>
+  </mailSettings>
+</system.net>
+
+Les emails seront sauvegardes sous forme de fichiers .eml dans C:\EmailTest\
+Le code a 6 chiffres sera visible dans ces fichiers sans avoir besoin de vrai SMTP.
+================================================================ -->
